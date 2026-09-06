@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="CH-2 Ka Official Fixed", layout="wide")
+st.set_page_config(page_title="CH-2 Ka Fix", layout="wide")
 
 FOLDER = "CH 2(क)"
 os.makedirs(FOLDER, exist_ok=True)
@@ -58,24 +58,23 @@ with tab3:
         sel = st.selectbox('Print ke liye Gata chuno', df['c1'].tolist())
         r = df[df['c1']==sel].iloc[0]
 
+        # Data ko alag variable me - lambi line nahi
+        c1=r['c1']; c2=r['c2']; c3=r['c3']; c4=r['c4']; c5=r['c5']; c6=r['c6']; c7=r['c7']; c8=r['c8']; c9=r['c9']
+        c10=r['c10']; c11=r['c11']; c12=r['c12']; c13=r['c13']; c14=r['c14']; c15=r['c15']; c16=r['c16']; c17=r['c17']; c18=r['c18']; c19=r['c19']; c20=r['c20']
+        c21=r['c21']; c22=r['c22']; c23=r['c23']; c24=r['c24']; c25=r['c25']; c26=r['c26']; c27=r['c27']; c28=r['c28']; c29=r['c29']; c30=r['c30']
+        c31=r['c31']; c32=r['c32']; c33=r['c33']; c34=r['c34']; c35=r['c35']
+
         html = ""
         html += "<html><head><meta charset='utf-8'><style>"
         html += "@page{size:A4 landscape;margin:10mm;} body{font-family:Mangal,Arial;background:white;color:black;font-size:11px;}"
-        html += ".head{text-align:center;font-weight:bold;font-size:16px;margin-bottom:10px;}.line{margin:10px 0;}"
-        html += "table{width:100%;border-collapse:collapse;margin-bottom:18px;} th,td{border:1px solid black;padding:4px;text-align:center;font-size:10px;color:black;} th{background:#f2f2f2;}"
+        html += "table{width:100%;border-collapse:collapse;margin-bottom:18px;} th,td{border:1px solid black;padding:4px;text-align:center;font-size:10px;}"
         html += "</style></head><body>"
+        html += "<div style='text-align:center;font-weight:bold;font-size:16px;'>(जोत चकबन्दी आकार-पत्र 2-क)<br>(नियम 21)<br>खसरा चकबन्दी</div>"
+        html += "<div>गाँव........ परगना........ तहसील........ जिला........</div><br>"
 
-        html += "<div class='head'>(जोत चकबन्दी आकार-पत्र 2-क)<br>(नियम 21)<br>खसरा चकबन्दी</div>"
-        html += "<div class='line'>गाँव................ परगना................ तहसील................ जिला................</div>"
-
-        # 1-9
-        html += "<table><tr><th colspan='4'>क्षेत्रफल</th><th>आधार वर्ष के खाता खतौनी की संख्या</th><th>खातेदार का नाम और पता</th><th>असामी का नाम</th><th>कब्जा रखने वाले का नाम</th><th>कब्जे के विवाद</th></tr>"
-        html += "<tr><th>गाटा संख्या</th><th>जैसा कि आधार खसरा के स्तम्भ 2 में है</th><th>जैसा कि चालू बन्दोबस्त में है</th><th>जैसा स्थल पर पाया जाय</th><th>जोत चकबन्दी आकार पत्र II में लाल स्याही से</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>"
+        html += "<table><tr><th colspan='4'>क्षेत्रफल</th><th>आधार वर्ष</th><th>खातेदार</th><th>असामी</th><th>कब्जा वाले</th><th>विवाद</th></tr>"
         html += "<tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>"
-        html += "<tr><td>" + str(r['c1']) + "</td><td>" + str(r['c2']) + "</td><td>" + str(r['c3']) + "</td><td>" + str(r['c4']) + "</td><td>" + str(r['c5']) + "</td><td>" + str(r['c6']) + "</td><td>" + str(r['c7']) + "</td><td>" + str(r['c8']) + "</td><td>" + str(r['c9']) + "</td></tr></table>"
+        html += "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(c1,c2,c3,c4,c5,c6,c7,c8,c9)
+        html += "</table>"
 
-        # 10-20 - Fix line break to avoid error
-        html += "<table><tr><th colspan='4'>समुन्नतियों का विवरण</th><th colspan='4'>बागों का विवरण धारा 4</th><th colspan='2'>अकृष्ट विवरण</th><th>सिंचाई</th></tr>"
-        html += "<tr><th>विवरण</th><th>नाप पुराना</th><th>मूल्य</th><th>स्वामी नाम अंश</th><th>प्रकार</th><th>क्षेत्रफल</th><th>प्रकार</th><th>सम्मिलित</th><th>असम्मिलित</th><th>साधन रीति</th><th>योग्य क्षेत्र</th></tr>"
-        html += "<tr><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>"
-        html += "<tr><td>" + str(r['c10']) + "</td><td>" + str(r['c11']) + "</td><td>" + str(r['c12']) + "</td><td>" + str(r['c13']) + "</td><td>" + str(r['c14']) + "</td><td>" + str(r['c15']) + "</td><td>" + str(r['c16']) + "</td
+        html += "<table><tr><th colspan='4'>
