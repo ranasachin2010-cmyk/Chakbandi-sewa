@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
 import os
+import streamlit.components.v1 as components
 
-st.set_page_config(page_title="CH-2 Ka - 3 Tab Final", layout="wide")
+st.set_page_config(page_title="CH-2 Ka - Print Button Final", layout="wide")
 
 FOLDER = "CH 2(क)"
 os.makedirs(FOLDER, exist_ok=True)
@@ -18,11 +19,10 @@ else:
     df = pd.read_csv(MASTER_FILE, dtype=str).fillna('')
 
 st.title('CH-2(क) - Turtipur')
-st.success(f'Folder: {FOLDER} | Total Saved: {len(df)} - Aapka 2 Gata Safe Hai')
+st.success(f'Folder: {FOLDER} | Total Saved: {len(df)}')
 
 tab1, tab2, tab3 = st.tabs(['Document Bharo', 'Search', 'Print'])
 
-# 1. DOCUMENT BHARO - Jaisa tha waisa
 with tab1:
     with st.form('form1'):
         vals = {}
@@ -40,7 +40,6 @@ with tab1:
                 st.success(f"Gata {vals['c1']} Save")
                 st.rerun()
 
-# 2. SEARCH - ALAG
 with tab2:
     st.subheader('Gata Search')
     search = st.text_input('Gata number likho jaise 2')
@@ -50,14 +49,10 @@ with tab2:
         show = df
         if search:
             show = df[df['c1'].str.contains(search, na=False)]
-
-        # c1 c2 ki jagah Hindi heading dikhega
         display = show.copy()
         display.columns = HINDI
         st.dataframe(display, use_container_width=True)
-        st.write(f'{len(show)} Gata mila')
 
-# 3. PRINT - ALAG
 with tab3:
     st.subheader('Official Print')
     if len(df) == 0:
@@ -70,14 +65,21 @@ with tab3:
 
         t1 = pd.DataFrame([{HINDI[i]: r[COLS[i]] for i in range(0,9)}])
         st.table(t1)
-
         t2 = pd.DataFrame([{HINDI[i]: r[COLS[i]] for i in range(9,20)}])
         st.table(t2)
-
         t3 = pd.DataFrame([{HINDI[i]: r[COLS[i]] for i in range(20,30)}])
         st.table(t3)
-
         t4 = pd.DataFrame([{HINDI[i]: r[COLS[i]] for i in range(30,35)}])
         st.table(t4)
 
-        st.info('Ctrl+P dabao - Yahi Print hoga')
+        # --- SIRF YAHI ADD KIYA - PRINT BUTTON ---
+        components.html("""
+        <button onclick="window.print()" style="width:100%; padding:15px; background-color:#ff0000; color:white; font-size:18px; font-weight:bold; border:none; border-radius:10px; cursor:pointer;">
+        🖨️ PRINT करो - Gata Print Nikalo
+        </button>
+        <style>
+        @media print {
+            header, footer,.stTabs { display: none!important; }
+        }
+        </style>
+        """, height=80)
