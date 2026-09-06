@@ -2,9 +2,29 @@ import streamlit as st
 import pandas as pd
 import os
 
-st.set_page_config(page_title="Jot Chakbandi Aakar Patra 2-ka - Exact Format", layout="wide")
+st.set_page_config(page_title="CH-2(क) Turtiypur FINAL", layout="wide")
+
+# FORCE LIGHT THEME - Aapke screenshot ka fix
+st.markdown("""
+<style>
+.stApp { background-color: white!important; color: black!important; }
+[data-testid="stTextInput"] input {
+    background-color: white!important;
+    color: black!important;
+    border: 1px solid #888!important;
+}
+input[aria-label="5 - जोत चकबन्दी आकार पत्र 11 में लाल स्याही से पुनरीक्षित वार्षिक रजिस्टर के खाता खतौनी की संख्या"],
+input[aria-label="28 - संचालक चकबन्दी अधिकारी द्वारा यथा अवधारित गाटे के चकबन्दी योग्य क्षेत्र का आनों में विनिमय अनुपात"] {
+    color: red!important;
+    font-weight: bold!important;
+    border: 2px solid red!important;
+    background: #fff0f0!important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 os.makedirs("data", exist_ok=True)
-FILE="data/CH2K_EXACT.csv"
+FILE="data/CH2K_TURTIPUR_LOCKED.csv"
 
 COLS = [f"c{i}" for i in range(1,36)]
 HEADS = [
@@ -31,7 +51,7 @@ HEADS = [
 "21 - सामान्यतया बोई जाने वाली फसलें खरीफ",
 "22 - रबी",
 "23 - जायद",
-"24 - गाटों की प्राकृतिक रूप-रेखा, विशेष रूप से अकृष्य भाग का क्षेत्रफल...",
+"24 - गाटों की प्राकृतिक रूप-रेखा",
 "25 - भूमि का वर्ग जैसा कि चालू बन्दोबस्त में अभिलिखित है",
 "26 - क्षेत्रफल - जोत चकबन्दी योग्य न हो",
 "27 - क्षेत्रफल - चकबन्दी योग्य",
@@ -50,90 +70,59 @@ if os.path.exists(FILE):
 else:
     df = pd.DataFrame(columns=COLS)
 
-# COLUMN 5 AUR 28 DONO RED - AAPKE GREEN MARK KE HISAB SE
-st.markdown("""
-<style>
-input[aria-label="5 - जोत चकबन्दी आकार पत्र 11 में लाल स्याही से पुनरीक्षित वार्षिक रजिस्टर के खाता खतौनी की संख्या"],
-input[aria-label="28 - संचालक चकबन्दी अधिकारी द्वारा यथा अवधारित गाटे के चकबन्दी योग्य क्षेत्र का आनों में विनिमय अनुपात"] {
-    color: red!important;
-    font-weight: bold!important;
-    border: 2px solid red!important;
-}
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("<h3 style='text-align:center'>(जोत चकबन्दी आकार-पत्र 2-क)<br>(नियम 21)<br>खसरा चकबन्दी</h3>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align:center; color:black'>(जोत चकबन्दी आकार-पत्र 2-क) (नियम 21)<br>खसरा चकबन्दी - गाँव तुर्तीपुर</h2>", unsafe_allow_html=True)
 
 c1,c2,c3,c4 = st.columns(4)
-with c1: gaon = st.text_input("गाँव")
-with c2: pargana = st.text_input("परगना")
-with c3: tehsil = st.text_input("तहसील")
-with c4: jila = st.text_input("जिला")
+with c1: gaon = st.text_input("गाँव", "तुर्तीपुर")
+with c2: pargana = st.text_input("परगना", "बंगर")
+with c3: tehsil = st.text_input("तहसील", "हरदोई")
+with c4: jila = st.text_input("जिला", "हरदोई")
 
 st.divider()
 st.subheader("कागज से देखकर CH-2(क) Feed करो - 1 से 35")
 
 with st.form("exact_form"):
     vals={}
-    st.write("**क्षेत्रफल (1-4) + आधार (5-9)**")
-    cols = st.columns(9)
+    st.write("क्षेत्रफल (1-4) + आधार (5-9)")
+    cols = st.columns(3)
     for i in range(9):
-        with cols[i]:
+        with cols[i%3]:
             vals[COLS[i]] = st.text_input(HEADS[i], key=f"in{i}")
 
-    st.write("**समुन्नतियाँ (10-13) + बाग (14-15) + अकृष्ट (16-20)**")
-    cols = st.columns(11)
+    st.write("समुन्नतियाँ (10-13) + बाग (14-15) + अकृष्ट (16-20)")
+    cols = st.columns(3)
     for i in range(9,20):
-        with cols[i-9]:
+        with cols[(i-9)%3]:
             vals[COLS[i]] = st.text_input(HEADS[i], key=f"in{i}")
 
-    st.write("**फसलें (21-24) + वर्ग (25) + क्षेत्रफल (26-27) + अनुपात/मूल्यांकन (28-30)**")
-    cols = st.columns(10)
+    st.write("फसलें (21-24) + वर्ग (25) + क्षेत्रफल (26-27) + अनुपात (28-30)")
+    cols = st.columns(3)
     for i in range(20,30):
-        with cols[i-20]:
+        with cols[(i-20)%3]:
             vals[COLS[i]] = st.text_input(HEADS[i], key=f"in{i}")
 
-    st.write("**मूल्यांकन (31-35)**")
-    cols = st.columns(5)
+    st.write("मूल्यांकन (31-35)")
+    cols = st.columns(3)
     for i in range(30,35):
-        with cols[i-30]:
+        with cols[(i-30)%3]:
             vals[COLS[i]] = st.text_input(HEADS[i], key=f"in{i}")
 
-    if st.form_submit_button("SAVE - कागज वाला गाटा सुरक्षित करो"):
+    if st.form_submit_button("SAVE - गाटा सुरक्षित करो"):
         if vals["c1"]=="":
-            st.error("स्तम्भ 1 - गाटा संख्या तो भरना ही है")
+            st.error("स्तम्भ 1 - गाटा संख्या भरना है")
         else:
             df = pd.concat([df, pd.DataFrame([vals])], ignore_index=True)
             df.to_csv(FILE, index=False, encoding="utf-8-sig")
-            st.success(f"गाटा {vals['c1']} feed ho gaya")
+            st.success(f"गाटा {vals['c1']} save - {gaon}")
             st.rerun()
 
 if len(df)>0:
     st.divider()
-    st.subheader(f"Feed hua Data - Total {len(df)} Gata")
-
-    st.write("**गाटा Delete करो**")
-    del_gata = st.selectbox("Delete karne ke liye Gata No chuno (स्तम्भ 1)", df["c1"].unique())
-    if st.button(f"Gata {del_gata} ko DELETE karo"):
+    st.subheader(f"Feed Data - {gaon} - Total {len(df)} Gata")
+    del_gata = st.selectbox("Delete Gata No", df["c1"].unique())
+    if st.button(f"Gata {del_gata} DELETE"):
         df = df[df["c1"]!= del_gata]
         df.to_csv(FILE, index=False, encoding="utf-8-sig")
-        st.success(f"Gata {del_gata} delete ho gaya")
         st.rerun()
-
     st.dataframe(df, use_container_width=True)
-
-    html = f"""
-    <html><head><meta charset="utf-8"><style>table,th,td{{border:1px solid black; border-collapse:collapse; font-size:10px;}} th{{background:#eee;}}.red{{color:red; font-weight:bold;}}</style></head>
-    <body>
-    <center><h3>(जोत चकबन्दी आकार-पत्र 2-क) (नियम 21) खसरा चकबन्दी</h3>
-    <p>गाँव {gaon} परगना {pargana} तहसील {tehsil} जिला {jila}</p></center>
-    <table width=100%><tr>
-    {"".join([f"<th>{h}</th>" for h in HEADS])}
-    </tr>
-    {"".join([f"<tr>{''.join([f'<td class={chr(34)}red{chr(34)}>{row[c]}</td>' if c in ['c5','c28'] else f'<td>{row[c]}</td>' for c in COLS])}</tr>" for _,row in df.iterrows()])}
-    </table>
-    <br><button onclick=window.print()>PRINT</button>
-    </body></html>
-    """
-    st.components.v1.html(html, height=800, scrolling=True)
-    st.download_button("CH-2(क) CSV Download", df.to_csv(index=False).encode("utf-8-sig"), "CH-2-KA-EXACT.csv")
+    st.download_button("CSV Download", df.to_csv(index=False).encode("utf-8-sig"), f"CH-2-KA-{gaon}.csv")
