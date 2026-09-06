@@ -1,94 +1,140 @@
 import streamlit as st
+import pandas as pd
+import os
 
-st.set_page_config(page_title="CH-2 Ka Full Process + Format", layout="wide")
+st.set_page_config(page_title="CH-2(क) Document Maker 1-1927", layout="wide")
+FILE = "CH2_Ka_Turtipur_1_1927.csv"
 
-st.markdown("""
-<style>
-.paper{background:white !important; color:black !important; border:2px solid black; padding:10px;}
-.t{width:100%; border-collapse:collapse; margin-top:10px;}
-.t th,.t td{border:1px solid black !important; padding:4px; font-size:10px; text-align:center; color:black !important; background:white !important;}
-.t th{background:#eeeeee !important;}
-.top{display:flex; justify-content:space-between; font-size:13px; border-bottom:1px solid black; padding-bottom:5px;}
-.box{border:1px solid black; padding:10px; margin:10px 0; background:#fff9c4;}
-@media print{.hide{display:none}}
-</style>
-""", unsafe_allow_html=True)
+# 35 Column के नाम - आपके Photo के अनुसार
+COLS = [
+"1_गाटा_संख्या", "2_आधार_खसरा_में", "3_चालू_बंदोबस्त_में", "4_स्थल_पर_पाया_जाय",
+"5_खतौनी_संख्या_CH11", "6_खातेदार_नाम_पता_अधिकार", "7_असामी_नाम_पता", "8_कब्जेदार_नाम", "9_विवाद_विवरण",
+"10_समुन्नति_विवरण_कुआँ_नलकूप_पेड़", "11_नाप_और_उम्र", "12_अनुमानित_मूल्य", "13_स्वामी_नाम_पता_अंश",
+"14_बाग_प्रकार_धारा4", "15_बाग_क्षेत्रफल", "16_बाग_प्रकार_दूसरा", "17_जोत_में_सम्मिलित", "18_जोत_में_असम्मिलित",
+"19_सिंचाई_साधन_रीति", "20_सिंचाई_योग्य_क्षेत्र",
+"21_खरीफ_फसल", "22_रबी_फसल", "23_जायद_फसल", "24_प्राकृतिक_रूप_रेखा", "25_भूमि_वर्ग_बंदोबस्त_में",
+"26_अयोग्य_क्षेत्र", "27_योग्य_क्षेत्र", "28_विनिमय_अनुपात_आनों_में", "29_मूल्यांकन_27x28", "30_परिष्कृत_विनिमय_वाद_संख्या",
+"31_मूल्यांकन_27x30", "32_संचालक_द्वारा_प्रस्तावित", "33_CO_द्वारा_परिष्कृत", "34_अपील_में_परिष्कृत", "35_विशेष_विवरण"
+]
 
-tab1, tab2, tab3 = st.tabs(["📖 CH-2(क) बनने का Process", "📋 Full Format 35 Column 1-1927", "🖨️ Print View"])
+# File बनाओ अगर नहीं है
+if not os.path.exists(FILE):
+    df = pd.DataFrame({"1_गाटा_संख्या": list(range(1, 1928))})
+    for c in COLS[1:]:
+        df[c] = ""
+    df.to_csv(FILE, index=False, encoding="utf-8-sig")
+else:
+    df = pd.read_csv(FILE, dtype=str).fillna("")
+    # अगर 1927 से कम है तो पूरा करो
+    if len(df) < 1927:
+        df = pd.DataFrame({"1_गाटा_संख्या": list(range(1, 1928))})
+        for c in COLS[1:]:
+            df[c] = ""
+        df.to_csv(FILE, index=False, encoding="utf-8-sig")
+
+st.title("CH-2(क) Document तैयार करो - Turtipur - 1 to 1927")
+st.success("कुल गाटा: 1927 - हर गाटे का Document यहाँ बनेगा")
+
+# गाँव की जानकारी
+st.sidebar.header("गाँव की जानकारी")
+gaon = st.sidebar.text_input("गाँव", "तुर्तिपुर")
+pargana = st.sidebar.text_input("परगना", "हरदोई")
+tehsil = st.sidebar.text_input("तहसील", "हरदोई")
+jila = st.sidebar.text_input("जिला", "हरदोई")
+
+# गाटा Select करो
+st.sidebar.divider()
+gata_no = st.sidebar.number_input("कौन सा गाटा भरना है? (1-1927)", 1, 1927, 1)
+row_idx = gata_no - 1
+current = df.iloc[row_idx]
+
+# Tabs
+tab1, tab2, tab3 = st.tabs(["📝 Document भरो", "📋 पूरा रजिस्टर देखो", "🖨️ Print / Download"])
 
 with tab1:
-    st.title("CH-2(क) - खसरा चकबंदी - कैसे बनता है - Full Process")
-    st.markdown("""
-    <div class="box">
-    <b>CH-2(क) = (जोत चकबंदी आकार-पत्र 2-क) (नियम 21) - खसरा चकबंदी</b><br>
-    ये चकबंदी का सबसे मुख्य कागज है। इसी से CH-11, CH-23, CH-41 बनते हैं।
-    </div>
-    """, unsafe_allow_html=True)
-    st.markdown("""
-    **Step 1: आधार वर्ष तय करो**
-    - धारा 4 का नोटिफिकेशन जिस साल निकला, उसका पिछला कृषि वर्ष आधार वर्ष।
-    - उसी साल की खतौनी (वार्षिक रजिस्टर) को लाल स्याही से CH-11 में लिखते हैं।
+    st.subheader(f"गाटा संख्या {gata_no} का Document भरो")
+    st.info("CH-2(क) कैसे भरते हैं - नीचे हर कॉलम का मतलब लिखा है")
 
-    **Step 2: कागज इकट्ठा करो**
-    - आधार खसरा, चालू बंदोबस्त, खतौनी, गांव का नक्शा, गाटा-नक्शा, कब्जा रजिस्टर
+    with st.form(f"form_{gata_no}"):
+        c1,c2,c3,c4 = st.columns(4)
+        with c1:
+            col1 = st.text_input("1. गाटा संख्या", value=str(current["1_गाटा_संख्या"]))
+            col2 = st.text_input("2. आधार खसरा में क्षेत्रफल", value=str(current["2_आधार_खसरा_में"]))
+        with c2:
+            col3 = st.text_input("3. चालू बंदोबस्त में", value=str(current["3_चालू_बंदोबस्त_में"]))
+            col4 = st.text_input("4. स्थल पर पाया जाय", value=str(current["4_स्थल_पर_पाया_जाय"]))
+        with c3:
+            col5 = st.text_input("5. खतौनी संख्या CH-11", value=str(current["5_खतौनी_संख्या_CH11"]))
+            col6 = st.text_input("6. खातेदार नाम पता", value=str(current["6_खातेदार_नाम_पता_अधिकार"]))
+        with c4:
+            col7 = st.text_input("7. असामी", value=str(current["7_असामी_नाम_पता"]))
+            col8 = st.text_input("8. कब्जेदार", value=str(current["8_कब्जेदार_नाम"]))
 
-    **Step 3: स्थल पर जाँच (लेखपाल करता है)**
-    - हर गाटा (आपके गांव में 1 से 1927) पर जाकर देखना - क्या बोया है, कुआँ/नलकूप/पेड़ है, बाग है, सिंचाई है, जमीन कैसी है
+        st.divider()
+        st.write("**10-20: समुन्नति, बाग, अकृष्ट, सिंचाई (आपके Photo 1 वाला)**")
+        c1,c2,c3 = st.columns(3)
+        with c1:
+            col10 = st.text_input("10. कुआँ/नलकूप/पेड़ विवरण", value=str(current["10_समुन्नति_विवरण_कुआँ_नलकूप_पेड़"]))
+            col11 = st.text_input("11. नाप और उम्र", value=str(current["11_नाप_और_उम्र"]))
+            col12 = st.text_input("12. मूल्य", value=str(current["12_अनुमानित_मूल्य"]))
+            col13 = st.text_input("13. स्वामी", value=str(current["13_स्वामी_नाम_पता_अंश"]))
+        with c2:
+            col14 = st.text_input("14. बाग प्रकार", value=str(current["14_बाग_प्रकार_धारा4"]))
+            col15 = st.text_input("15. बाग क्षेत्रफल", value=str(current["15_बाग_क्षेत्रफल"]))
+            col16 = st.text_input("16. बाग प्रकार 2", value=str(current["16_बाग_प्रकार_दूसरा"]))
+            col17 = st.text_input("17. जोत में सम्मिलित", value=str(current["17_जोत_में_सम्मिलित"]))
+        with c3:
+            col18 = st.text_input("18. जोत में असम्मिलित", value=str(current["18_जोत_में_असम्मिलित"]))
+            col19 = st.text_input("19. सिंचाई साधन", value=str(current["19_सिंचाई_साधन_रीति"]))
+            col20 = st.text_input("20. सिंचाई योग्य", value=str(current["20_सिंचाई_योग्य_क्षेत्र"]))
 
-    **Step 4: 35 कॉलम भरने का तरीका**
+        st.divider()
+        st.write("**21-30: फसल, प्राकृतिक रूप, भूमि वर्ग, विनिमय (आपके Photo 3 वाला)**")
+        c1,c2,c3 = st.columns(3)
+        with c1:
+            col21 = st.text_input("21. खरीफ", value=str(current["21_खरीफ_फसल"]))
+            col22 = st.text_input("22. रबी", value=str(current["22_रबी_फसल"]))
+            col23 = st.text_input("23. जायद", value=str(current["23_जायद_फसल"]))
+        with c2:
+            col24 = st.text_area("24. प्राकृतिक रूप-रेखा", value=str(current["24_प्राकृतिक_रूप_रेखा"]))
+            col25 = st.text_input("25. भूमि वर्ग", value=str(current["25_भूमि_वर्ग_बंदोबस्त_में"]))
+        with c3:
+            col26 = st.text_input("26. अयोग्य क्षेत्र", value=str(current["26_अयोग्य_क्षेत्र"]))
+            col27 = st.text_input("27. योग्य क्षेत्र", value=str(current["27_योग्य_क्षेत्र"]))
+            col28 = st.text_input("28. विनिमय अनुपात", value=str(current["28_विनिमय_अनुपात_आनों_में"]))
+            col29 = st.text_input("29. मूल्यांकन 27x28", value=str(current["29_मूल्यांकन_27x28"]))
+            col30 = st.text_input("30. परिष्कृत वाद संख्या", value=str(current["30_परिष्कृत_विनिमय_वाद_संख्या"]))
 
-    - **1-4 क्षेत्रफल:** 1=गाटा नंबर (1-1927), 2=आधार खसरा में कितना, 3=बंदोबस्त में कितना, 4=मौके पर कितना
-    - **5-9:** 5=खतौनी नंबर, 6=खातेदार नाम/पता/अधिकार, 7=असामी, 8=कब्जेदार, 9=विवाद
-    - **10-13 समुन्नति:** 10=कुआँ/नलकूप/पेड़ का विवरण, 11=नाप/उम्र, 12=मूल्य, 13=स्वामी
-    - **14-18 बाग/अकृष्ट:** 14=बाग प्रकार, 15=क्षेत्रफल, 16=प्रकार, 17=जोत में शामिल, 18=असम्मिलित
-    - **19-20 सिंचाई:** 19=साधन/रीति, 20=योग्य क्षेत्र
-    - **21-23 फसल:** 21=खरीफ, 22=रबी, 23=जायद
-    - **24 प्राकृतिक रूप:** जमीन ऊँची-नीची, अकृष्य भाग, आसपास के गाटों से तल, सिंचाई से दूरी
-    - **25 भूमि वर्ग:** बंदोबस्त में क्या दर्ज है
-    - **26-27 क्षेत्रफल:** 26=अयोग्य, 27=योग्य
-    - **28 विनिमय अनुपात:** SOC द्वारा आनों में (शब्दों में)
-    - **29 मूल्यांकन:** 27 x 28
-    - **30 परिष्कृत:** वरिष्ठ अधिकारी द्वारा, वाद संख्या/दिनांक के साथ
-    - **31-35 अंतिम:** 31=मूल्यांकन (27x30), 32=संचालक प्रस्तावित, 33=CO परिष्कृत, 34=अपील में परिष्कृत, 35=विशेष (जैसे निजी नलकूप CH-23 में जाएगा)
+        st.divider()
+        st.write("**31-35: अंतिम मूल्यांकन (आपके Photo 2 वाला)**")
+        c1,c2 = st.columns(2)
+        with c1:
+            col31 = st.text_input("31. मूल्यांकन 27x30", value=str(current["31_मूल्यांकन_27x30"]))
+            col32 = st.text_input("32. संचालक प्रस्तावित", value=str(current["32_संचालक_द्वारा_प्रस्तावित"]))
+            col33 = st.text_input("33. CO परिष्कृत", value=str(current["33_CO_द्वारा_परिष्कृत"]))
+        with c2:
+            col34 = st.text_input("34. अपील में परिष्कृत", value=str(current["34_अपील_में_परिष्कृत"]))
+            col35 = st.text_area("35. विशेष विवरण", value=str(current["35_विशेष_विवरण"]))
 
-    **Step 5: हस्ताक्षर**
-    - तैयारकर्ता लेखपाल -> राजस्व निरीक्षक -> चकबंदी अधिकारी
-    """)
-
-with tab2:
-    st.markdown('<div class="paper">', unsafe_allow_html=True)
-    st.markdown("""
-    <div class="top"><span>गाँव ....तुर्तिपुर....</span><span>परगना ....हरदोई....</span><span>तहसील ....हरदोई....</span><span>जिला ....हरदोई....</span></div>
-    <h3 style="text-align:center;">खसरा चकबन्दी - प्रारूप CH-2(क) - Full 35 Column - 1 to 1927</h3>
-    """, unsafe_allow_html=True)
-
-    html1 = """<table class="t"><tr><th colspan="4">क्षेत्रफल</th><th>खातौनी संख्या</th><th>खातेदार</th><th>असामी</th><th>कब्जा</th><th>विवाद</th></tr>
-    <tr><th>1 गाटा संख्या<br>1</th><th>आधार खसरा<br>2</th><th>बंदोबस्त<br>3</th><th>स्थल पर<br>4</th><th>खतौनी 11<br>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>"""
-    for i in range(1, 1928):
-        html1 += f"<tr><td>{i}</td><td></td><td></td><td></td><td></td></tr>"
-    html1 += "</table>"
-    st.markdown(html1, unsafe_allow_html=True)
-
-    html2 = """<table class="t"><tr><th colspan="4">समुन्नतियों के विवरण कुआँ नलकूप पेड़</th><th colspan="4">बागों का विवरण</th><th colspan="2">अकृष्ट</th><th>सिंचाई</th></tr>
-    <tr><th>विवरण 10</th><th>नाप 11</th><th>मूल्य 12</th><th>स्वामी 13</th><th>प्रकार 14</th><th>क्षेत्र 15</th><th>प्रकार 16</th><th>सम्मिलित 17</th><th>असम्मिलित 18</th><th>साधन 19</th><th>योग्य 20</th></tr>"""
-    for _ in range(1, 1928):
-        html2 += "<tr>" + "<td></td>"*11 + "</tr>"
-    html2 += "</table>"
-    st.markdown(html2, unsafe_allow_html=True)
-
-    html3 = """<table class="t"><tr><th colspan="3">फसलें</th><th>प्राकृतिक रूप</th><th>भूमि वर्ग</th><th colspan="2">क्षेत्रफल</th><th>विनिमय</th><th>मूल्यांकन</th><th>परिष्कृत</th></tr>
-    <tr><th>खरीफ 21</th><th>रबी 22</th><th>जायद 23</th><th>24</th><th>25</th><th>अयोग्य 26</th><th>योग्य 27</th><th>28</th><th>29</th><th>30</th></tr>"""
-    for _ in range(1, 1928):
-        html3 += "<tr>" + "<td></td>"*10 + "</tr>"
-    html3 += "</table>"
-    st.markdown(html3, unsafe_allow_html=True)
-
-    html4 = """<table class="t"><tr><th>मूल्यांकन 31</th><th>प्रस्तावित 32</th><th>परिष्कृत 33</th><th>अपील 34</th><th>विशेष 35</th></tr>"""
-    for _ in range(1, 1928):
-        html4 += "<tr>" + "<td></td>"*5 + "</tr>"
-    html4 += "</table>"
-    st.markdown(html4, unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with tab3:
-    st.info("Print के लिए Full Format वाले Tab पर जाकर Ctrl+P दबाओ - 1 से 1927 तक Same Format Print होगा")
+        submitted = st.form_submit_button(f"गाटा {gata_no} Save करो", type="primary", use_container_width=True)
+        if submitted:
+            df.at[row_idx, "1_गाटा_संख्या"] = col1
+            df.at[row_idx, "2_आधार_खसरा_में"] = col2
+            df.at[row_idx, "3_चालू_बंदोबस्त_में"] = col3
+            df.at[row_idx, "4_स्थल_पर_पाया_जाय"] = col4
+            df.at[row_idx, "5_खतौनी_संख्या_CH11"] = col5
+            df.at[row_idx, "6_खातेदार_नाम_पता_अधिकार"] = col6
+            df.at[row_idx, "7_असामी_नाम_पता"] = col7
+            df.at[row_idx, "8_कब्जेदार_नाम"] = col8
+            df.at[row_idx, "9_विवाद_विवरण"] = current["9_विवाद_विवरण"]
+            df.at[row_idx, "10_समुन्नति_विवरण_कुआँ_नलकूप_पेड़"] = col10
+            df.at[row_idx, "11_नाप_और_उम्र"] = col11
+            df.at[row_idx, "12_अनुमानित_मूल्य"] = col12
+            df.at[row_idx, "13_स्वामी_नाम_पता_अंश"] = col13
+            df.at[row_idx, "14_बाग_प्रकार_धारा4"] = col14
+            df.at[row_idx, "15_बाग_क्षेत्रफल"] = col15
+            df.at[row_idx, "16_बाग_प्रकार_दूसरा"] = col16
+            df.at[row_idx, "17_जोत_में_सम्मिलित"] = col17
+            df.at[row_idx, "18_जोत_में_असम्मिलित"] = col18
+            df.at[row_idx, "19_सिंचाई_साधन_रीति"] = col19
+            df.at[row_idx, "20_सिंचाई
