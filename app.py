@@ -6,7 +6,6 @@ st.set_page_config(page_title="Jot Chakbandi Aakar Patra 2-ka - Exact Format", l
 os.makedirs("data", exist_ok=True)
 FILE="data/CH2K_EXACT.csv"
 
-# Aapke bheje hue 4 photo ke hisab se exact 35 columns
 COLS = [f"c{i}" for i in range(1,36)]
 HEADS = [
 "1 - गाटा संख्या",
@@ -51,9 +50,20 @@ if os.path.exists(FILE):
 else:
     df = pd.DataFrame(columns=COLS)
 
+# COLUMN 5 KO RED KARNE KA CSS - AAPKE BOLE HISAB SE
+st.markdown("""
+<style>
+/* 5th column ka input box red */
+div[data-testid="column"]:nth-of-type(5) input {
+    color: red!important;
+    font-weight: bold!important;
+    border: 2px solid red!important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown("<h3 style='text-align:center'>(जोत चकबन्दी आकार-पत्र 2-क)<br>(नियम 21)<br>खसरा चकबन्दी</h3>", unsafe_allow_html=True)
 
-# Gaon ka header
 c1,c2,c3,c4 = st.columns(4)
 with c1: gaon = st.text_input("गाँव")
 with c2: pargana = st.text_input("परगना")
@@ -65,7 +75,6 @@ st.subheader("कागज से देखकर CH-2(क) Feed करो - 1 �
 
 with st.form("exact_form"):
     vals={}
-    # 9-9 ke group me dikhayenge jaise photo me hai
     st.write("**क्षेत्रफल (1-4) + आधार (5-9)**")
     cols = st.columns(9)
     for i in range(9):
@@ -102,19 +111,27 @@ with st.form("exact_form"):
 if len(df)>0:
     st.divider()
     st.subheader(f"Feed hua Data - Total {len(df)} Gata")
+
+    # GATA DELETE FEATURE - AAPKE BOLE HISAB SE
+    st.write("**गाटा Delete करो**")
+    del_gata = st.selectbox("Delete karne ke liye Gata No chuno (स्तम्भ 1)", df["c1"].unique())
+    if st.button(f"Gata {del_gata} ko DELETE karo"):
+        df = df[df["c1"]!= del_gata]
+        df.to_csv(FILE, index=False, encoding="utf-8-sig")
+        st.success(f"Gata {del_gata} delete ho gaya")
+        st.rerun()
+
     st.dataframe(df, use_container_width=True)
 
-    # Print - Exact sarkari print
-    st.subheader("Print - Bilkul aapke kagaj jaisa")
     html = f"""
-    <html><head><meta charset="utf-8"><style>table,th,td{{border:1px solid black; border-collapse:collapse; font-size:10px;}} th{{background:#eee;}}</style></head>
+    <html><head><meta charset="utf-8"><style>table,th,td{{border:1px solid black; border-collapse:collapse; font-size:10px;}} th{{background:#eee;}}.red{{color:red; font-weight:bold;}}</style></head>
     <body>
     <center><h3>(जोत चकबन्दी आकार-पत्र 2-क) (नियम 21) खसरा चकबन्दी</h3>
     <p>गाँव {gaon} परगना {pargana} तहसील {tehsil} जिला {jila}</p></center>
     <table width=100%><tr>
     {"".join([f"<th>{h}</th>" for h in HEADS])}
     </tr>
-    {"".join([f"<tr>{''.join([f'<td>{row[c]}</td>' for c in COLS])}</tr>" for _,row in df.iterrows()])}
+    {"".join([f"<tr>{''.join([f'<td class={chr(34)}red{chr(34)}>{row[c]}</td>' if c=='c5' else f'<td>{row[c]}</td>' for c in COLS])}</tr>" for _,row in df.iterrows()])}
     </table>
     <br><button onclick=window.print()>PRINT</button>
     </body></html>
