@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="CH-2 Ka Final Fixed", layout="wide")
+st.set_page_config(page_title="CH-2 Ka Official 4 Page", layout="wide")
 
 FOLDER = "CH 2(क)"
 os.makedirs(FOLDER, exist_ok=True)
@@ -58,32 +58,28 @@ with tab3:
         sel = st.selectbox('Print ke liye Gata chuno', df['c1'].tolist())
         r = df[df['c1']==sel].iloc[0]
 
-        st.subheader('Preview - Gata ' + str(sel))
-        st.table(pd.DataFrame([{HINDI[i]: r[COLS[i]] for i in range(0,9)}]))
-        st.table(pd.DataFrame([{HINDI[i]: r[COLS[i]] for i in range(9,20)}]))
-        st.table(pd.DataFrame([{HINDI[i]: r[COLS[i]] for i in range(20,30)}]))
-        st.table(pd.DataFrame([{HINDI[i]: r[COLS[i]] for i in range(30,35)}]))
-
-        # OFFICIAL FORMAT - bina f-string ke, isliye error nahi
-        html = '<html><head><style>'
-        html += '@page{size:A4 landscape;margin:8mm;} body{font-family:Mangal,Arial;background:white;color:black;}'
-        html += 'table{width:100%;border-collapse:collapse;margin-bottom:10px;} th,td{border:1.5px solid black;padding:4px;font-size:10px;text-align:center;} th{background:#eee;}.title{text-align:center;font-weight:bold;font-size:16px;border:2px solid black;padding:6px;margin-bottom:8px;}'
+        # OFFICIAL 4 PAGE FORMAT - Aapke photo jaisa
+        html = '<html><head><meta charset="utf-8"><style>'
+        html += '@page{size:A4 landscape;margin:10mm;} body{font-family:Mangal,Arial;background:white;color:black;font-size:11px;}'
+        html += '.head{text-align:center;font-weight:bold;font-size:16px;line-height:22px;margin-bottom:10px;}'
+        html += '.line{margin:10px 0 10px 0;}'
+        html += 'table{width:100%;border-collapse:collapse;margin-bottom:18px;} th,td{border:1px solid black;padding:4px;text-align:center;vertical-align:top;font-size:10px;color:black;} th{font-weight:bold;background:#f2f2f2;}'
+        html += '.num{background:white;font-weight:bold;}'
         html += '</style></head><body>'
-        html += '<div class="title">CH-2(क) आकार-पत्र 2-क - गाटा ' + str(r['c1']) + ' - गाँव तुर्तिपुर</div>'
 
-        html += '<table><tr><th>1 गाटा</th><th>2 आधार</th><th>3 बंदोबस्त</th><th>4 स्थल पर</th><th>5 खतौनी</th><th>6 खातेदार</th><th>7 असामी</th><th>8 कब्जेदार</th><th>9 विवाद</th></tr>'
-        html += '<tr><td>' + str(r['c1']) + '</td><td>' + str(r['c2']) + '</td><td>' + str(r['c3']) + '</td><td>' + str(r['c4']) + '</td><td>' + str(r['c5']) + '</td><td>' + str(r['c6']) + '</td><td>' + str(r['c7']) + '</td><td>' + str(r['c8']) + '</td><td>' + str(r['c9']) + '</td></tr></table>'
+        html += '<div class="head">(जोत चकबन्दी आकार-पत्र 2-क)<br>(नियम 21)<br>खसरा चकबन्दी</div>'
+        html += '<div class="line">गाँव.................... परगना.................... तहसील.................... जिला....................</div>'
 
-        html += '<table><tr><th>10 समुन्नति</th><th>11 नाप</th><th>12 मूल्य</th><th>13 स्वामी</th><th>14 बाग धारा4</th><th>15 क्षेत्र</th><th>16 दूसरा</th><th>17 सम्मिलित</th><th>18 असम्मिलित</th><th>19 साधन</th><th>20 योग्य</th></tr>'
-        html += '<tr><td>' + str(r['c10']) + '</td><td>' + str(r['c11']) + '</td><td>' + str(r['c12']) + '</td><td>' + str(r['c13']) + '</td><td>' + str(r['c14']) + '</td><td>' + str(r['c15']) + '</td><td>' + str(r['c16']) + '</td><td>' + str(r['c17']) + '</td><td>' + str(r['c18']) + '</td><td>' + str(r['c19']) + '</td><td>' + str(r['c20']) + '</td></tr></table>'
+        # PAGE 1 - 1 to 9
+        html += '<table>'
+        html += '<tr><th colspan="4">क्षेत्रफल</th><th>आधार वर्ष के खाता- खतौनी की संख्या</th><th>खातेदार का नाम और पता और भूमिक अधिकार का प्रकार, जो खाते में पहले गाटे के सामने हो</th><th>असामी का नाम, यदि कोई हो, और उसका पता (आधार खसरे का स्तम्भ 5)</th><th>कब्जा रखने वाले व्यक्ति का नाम, यदि कोई हो, जो आधार खाते के विशेष विवरण के स्तम्भ में दिखाया गया हो</th><th>कब्जे के विवादों के विवरण तथा कब्जे की अवधि, जिसका दावा किया जाय और उसका आधार</th></tr>'
+        html += '<tr><th>गाटा संख्या</th><th>जैसा कि आधार खसरा के स्तम्भ 2 में अभिलिखित है</th><th>जैसा कि चालू बन्दोबस्त में अभिलिखित है</th><th>जैसा स्थल पर पाया जाय</th><th>जोत चकबन्दी आकार पत्र II में लाल स्याही से पुनरीक्षित वार्षिक रजिस्टर के खाता खतौनी की संख्या</th><th></th><th></th><th></th><th></th></tr>'
+        html += '<tr><th class="num">1</th><th class="num">2</th><th class="num">3</th><th class="num">4</th><th class="num">5</th><th class="num">6</th><th class="num">7</th><th class="num">8</th><th class="num">9</th></tr>'
+        html += '<tr><td>' + str(r['c1']) + '</td><td>' + str(r['c2']) + '</td><td>' + str(r['c3']) + '</td><td>' + str(r['c4']) + '</td><td>' + str(r['c5']) + '</td><td>' + str(r['c6']) + '</td><td>' + str(r['c7']) + '</td><td>' + str(r['c8']) + '</td><td>' + str(r['c9']) + '</td></tr>'
+        html += '</table>'
 
-        html += '<table><tr><th>21 खरीफ</th><th>22 रबी</th><th>23 जायद</th><th>24 प्राकृतिक</th><th>25 भूमि वर्ग</th><th>26 अयोग्य</th><th>27 योग्य</th><th>28 अनुपात</th><th>29 मूल्यांकन</th><th>30 वाद संख्या</th></tr>'
-        html += '<tr><td>' + str(r['c21']) + '</td><td>' + str(r['c22']) + '</td><td>' + str(r['c23']) + '</td><td>' + str(r['c24']) + '</td><td>' + str(r['c25']) + '</td><td>' + str(r['c26']) + '</td><td>' + str(r['c27']) + '</td><td>' + str(r['c28']) + '</td><td>' + str(r['c29']) + '</td><td>' + str(r['c30']) + '</td></tr></table>'
-
-        html += '<table><tr><th>31 मूल्यांकन 27x30</th><th>32 संचालक</th><th>33 CO</th><th>34 अपील</th><th>35 विशेष</th></tr>'
-        html += '<tr><td>' + str(r['c31']) + '</td><td>' + str(r['c32']) + '</td><td>' + str(r['c33']) + '</td><td>' + str(r['c34']) + '</td><td>' + str(r['c35']) + '</td></tr></table>'
-
-        html += '<button onclick="window.print()" style="width:100%;padding:14px;background:red;color:white;font-size:17px;font-weight:bold;border:none;border-radius:8px;">PRINT करो - Gata ' + str(r['c1']) + ' - Official CH-2(क)</button>'
-        html += '</body></html>'
-
-        components.html(html, height=900, scrolling=True)
+        # PAGE 2 - 10 to 20
+        html += '<table>'
+        html += '<tr><th colspan="4">समुन्नतियों के विवरण, यदि कोई हों, जैसे कुआँ, नलकूप आदि, जो गाटे में स्थिति हों या बाग से भिन्न पेड़, जो गाटे या उसकी सीमाओं में स्थित हों</th><th colspan="4">उस वर्ष के, जिसमें धारा 4 के अधीन विज्ञप्ति जारी की गयी थी, ठीक पूर्व के कृषि वर्ष में विद्यमान बागों का विवरण</th><th colspan="2">अकृष्ट क्षेत्रफल का विवरण</th><th>सिंचाई का विवरण</th></tr>'
+        html += '<tr><th>विवरण</th><th>नाप और कितना पुराना है</th><th>अनुमानित मूल्य</th><th>स्वामी का नाम, उसका पता और सम्पत्ति में अंश</th><th>प्रकार</th><th>क्षेत्रफल</th><th>प्रकार</th><th>जोत में सम्मिलित</th><th>जोत में असम्मिलित</th><th>सिंचाई का साधन और रीति</th><th>सिंचाई योग्य क्षेत्रफल</th></tr>'
+        html += '<tr><th class="num">10</th><th class="num">11</th><th class="num">12</th><th class="num">13</th><th class="num">14</th><th class="num">15</th><th class="num">16</th><th class="num">17</th><th class="num">18</th><th class="num">19</th><th class="num">
