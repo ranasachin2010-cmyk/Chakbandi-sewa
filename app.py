@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-st.set_page_config(page_title="CH-2(Ka) - Final", layout="wide")
+st.set_page_config(page_title="CH-2 Ka - 3 Tab Final", layout="wide")
 
 FOLDER = "CH 2(क)"
 os.makedirs(FOLDER, exist_ok=True)
@@ -18,10 +18,11 @@ else:
     df = pd.read_csv(MASTER_FILE, dtype=str).fillna('')
 
 st.title('CH-2(क) - Turtipur')
-st.success(f'Folder: {FOLDER} | Total: {len(df)}')
+st.success(f'Folder: {FOLDER} | Total Saved: {len(df)} - Aapka 2 Gata Safe Hai')
 
-tab1, tab2 = st.tabs(['Document Bharo', 'Search + Print'])
+tab1, tab2, tab3 = st.tabs(['Document Bharo', 'Search', 'Print'])
 
+# 1. DOCUMENT BHARO - Jaisa tha waisa
 with tab1:
     with st.form('form1'):
         vals = {}
@@ -39,23 +40,34 @@ with tab1:
                 st.success(f"Gata {vals['c1']} Save")
                 st.rerun()
 
+# 2. SEARCH - ALAG
 with tab2:
-    # --- SIRF YAHI ADD KIYA HAI ---
-    search = st.text_input('Gata Search karo - Gata number likho', '')
-    show_df = df
-    if search:
-        show_df = df[df['c1'].str.contains(search, na=False)]
+    st.subheader('Gata Search')
+    search = st.text_input('Gata number likho jaise 2')
+    if len(df) == 0:
+        st.warning('Koi data nahi')
+    else:
+        show = df
+        if search:
+            show = df[df['c1'].str.contains(search, na=False)]
 
-    st.dataframe(show_df, use_container_width=True)
+        # c1 c2 ki jagah Hindi heading dikhega
+        display = show.copy()
+        display.columns = HINDI
+        st.dataframe(display, use_container_width=True)
+        st.write(f'{len(show)} Gata mila')
 
-    if len(show_df) > 0:
-        sel = st.selectbox('Print ke liye Gata chuno', show_df['c1'].tolist())
+# 3. PRINT - ALAG
+with tab3:
+    st.subheader('Official Print')
+    if len(df) == 0:
+        st.warning('Koi data nahi')
+    else:
+        sel = st.selectbox('Print ke liye Gata chuno', df['c1'].tolist())
         r = df[df['c1']==sel].iloc[0]
 
-        st.divider()
-        st.subheader(f'CH-2(क) Official Print - Gata {sel} - Gaon Turtipur')
+        st.markdown(f"### CH-2(क) Official Print - Gata {sel}")
 
-        # AB c1 c2 NAHI - SIDHA HINDI HEADING
         t1 = pd.DataFrame([{HINDI[i]: r[COLS[i]] for i in range(0,9)}])
         st.table(t1)
 
@@ -68,4 +80,4 @@ with tab2:
         t4 = pd.DataFrame([{HINDI[i]: r[COLS[i]] for i in range(30,35)}])
         st.table(t4)
 
-        st.info('Ctrl+P dabao - Yahi Official Print hoga')
+        st.info('Ctrl+P dabao - Yahi Print hoga')
