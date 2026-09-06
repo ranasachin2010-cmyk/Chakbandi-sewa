@@ -50,11 +50,11 @@ if os.path.exists(FILE):
 else:
     df = pd.DataFrame(columns=COLS)
 
-# COLUMN 5 KO RED KARNE KA CSS - AAPKE BOLE HISAB SE
+# COLUMN 5 AUR 28 DONO RED - AAPKE GREEN MARK KE HISAB SE
 st.markdown("""
 <style>
-/* 5th column ka input box red */
-div[data-testid="column"]:nth-of-type(5) input {
+input[aria-label="5 - जोत चकबन्दी आकार पत्र 11 में लाल स्याही से पुनरीक्षित वार्षिक रजिस्टर के खाता खतौनी की संख्या"],
+input[aria-label="28 - संचालक चकबन्दी अधिकारी द्वारा यथा अवधारित गाटे के चकबन्दी योग्य क्षेत्र का आनों में विनिमय अनुपात"] {
     color: red!important;
     font-weight: bold!important;
     border: 2px solid red!important;
@@ -112,7 +112,6 @@ if len(df)>0:
     st.divider()
     st.subheader(f"Feed hua Data - Total {len(df)} Gata")
 
-    # GATA DELETE FEATURE - AAPKE BOLE HISAB SE
     st.write("**गाटा Delete करो**")
     del_gata = st.selectbox("Delete karne ke liye Gata No chuno (स्तम्भ 1)", df["c1"].unique())
     if st.button(f"Gata {del_gata} ko DELETE karo"):
@@ -131,7 +130,7 @@ if len(df)>0:
     <table width=100%><tr>
     {"".join([f"<th>{h}</th>" for h in HEADS])}
     </tr>
-    {"".join([f"<tr>{''.join([f'<td class={chr(34)}red{chr(34)}>{row[c]}</td>' if c=='c5' else f'<td>{row[c]}</td>' for c in COLS])}</tr>" for _,row in df.iterrows()])}
+    {"".join([f"<tr>{''.join([f'<td class={chr(34)}red{chr(34)}>{row[c]}</td>' if c in ['c5','c28'] else f'<td>{row[c]}</td>' for c in COLS])}</tr>" for _,row in df.iterrows()])}
     </table>
     <br><button onclick=window.print()>PRINT</button>
     </body></html>
