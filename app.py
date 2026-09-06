@@ -2,50 +2,56 @@ import streamlit as st
 import pandas as pd
 import os
 
-st.set_page_config(page_title="Chakbandi Admin Control", layout="wide")
+st.set_page_config(page_title="Chakbandi Locked System", layout="wide")
 
-# --- ADMIN LOGIN SYSTEM ---
 if "is_admin" not in st.session_state:
     st.session_state.is_admin = False
 
-ADMIN_USER = "admin"
-ADMIN_PASS = "turtipur123"
+# --- FINAL ADMIN CREDENTIALS ---
+ADMIN_USER = "turtipur_admin"
+ADMIN_PASS = "Turtipur@2026"
 
 st.markdown("""
 <div style="background:linear-gradient(90deg,#14532d,#16a34a);padding:15px;border-radius:12px;text-align:center">
 <h1 style="color:white;margin:0">Chakbandi Sewa - Gram Turtipur</h1>
-<p style="color:#dcfce7;margin:0">CH-2(A) + CH-11 + CH-23(1) - Admin Control System</p>
-<p style="color:white;margin:0;font-size:12px">Tehsil Sursa, Hardoi</p>
+<p style="color:#dcfce7;margin:0">DATA LOCKED - Admin Only Data Feed</p>
+<p style="color:white;margin:0;font-size:12px">CH-2(A) | CH-11 | CH-23(1) - Tehsil Sursa, Hardoi</p>
 </div>
 """, unsafe_allow_html=True)
 
-# Sidebar Admin Login
 with st.sidebar:
-    st.markdown("### 🔐 Admin Panel")
+    st.markdown("## 🔒 DATA LOCK SYSTEM")
     if not st.session_state.is_admin:
-        u = st.text_input("Admin User", value="admin")
+        st.warning("🔒 Data Locked - Public View Only")
+        u = st.text_input("Admin User ID")
         p = st.text_input("Admin Password", type="password")
-        if st.button("Admin Login"):
+        if st.button("🔓 Unlock & Login", type="primary"):
             if u == ADMIN_USER and p == ADMIN_PASS:
                 st.session_state.is_admin = True
-                st.success("Admin Login Success!")
+                st.success("✅ Data Unlocked - Admin Access Granted!")
                 st.rerun()
             else:
-                st.error("Galat Password!")
-        st.info("Public Mode: Sirf Dekh Sakte Hain\nAdmin: Data Feed Kar Sakta Hai")
+                st.error("❌ Wrong ID/Password! Data Still Locked")
+        st.markdown("---")
+        st.info("""
+        **Public Permission:**
+        ✅ Search
+        ✅ View Data
+        ❌ No Edit
+        ❌ No Delete
+        ❌ No Upload
+
+        **Admin Permission:**
+        ✅ Full Control
+        """)
     else:
-        st.success("✅ Admin Logged In")
-        st.write(f"User: {ADMIN_USER}")
-        if st.button("Logout"):
+        st.success("🔓 DATA UNLOCKED")
+        st.write(f"👑 Admin: {ADMIN_USER}")
+        st.write("✅ Data Feed Allowed")
+        if st.button("🔒 Lock Data Again"):
             st.session_state.is_admin = False
             st.rerun()
 
-    st.markdown("---")
-    if st.session_state.is_admin:
-        st.markdown("#### 🛠️ Admin Permission")
-        st.write("✅ Add Data\n✅ Edit Data\n✅ Delete Data\n✅ Upload Excel\n✅ Download Backup")
-
-# Files - SAFE
 F2A = "ch_2a_35col.csv"
 F11 = "ch_11_20col.csv"
 F23 = "ch_23_1_28col.csv"
@@ -58,14 +64,13 @@ def load_file(f, cols):
     if os.path.exists(f):
         try: return pd.read_csv(f, dtype=str).fillna("")
         except: return pd.DataFrame(columns=cols)
-    else:
-        return pd.DataFrame(columns=cols)
+    else: return pd.DataFrame(columns=cols)
 
 df_2a = load_file(F2A, COLS_2A)
 df_11 = load_file(F11, COLS_11)
 df_23 = load_file(F23, COLS_23)
 
-tab_search, tab_2a, tab_11, tab_23 = st.tabs(["🔍 Search (Public)", "📄 CH-2(A)", "📄 CH-11", "📄 CH-23(1)"])
+tab_search, tab_2a, tab_11, tab_23 = st.tabs(["🔍 Search", "📄 CH-2(A)", "📄 CH-11", "📄 CH-23(1)"])
 
 def filt(df, query):
     if not query: return df
@@ -73,62 +78,51 @@ def filt(df, query):
 
 with tab_search:
     q = st.text_input("Search Sab Me", placeholder="904/2, Kaliska")
-    st.markdown("### CH-2(A)")
+    st.write(f"CH-2(A): {len(filt(df_2a,q))} | CH-11: {len(filt(df_11,q))} | CH-23(1): {len(filt(df_23,q))}")
     st.dataframe(filt(df_2a, q), use_container_width=True)
-    st.markdown("### CH-11")
     st.dataframe(filt(df_11, q), use_container_width=True)
-    st.markdown("### CH-23(1)")
     st.dataframe(filt(df_23, q), use_container_width=True)
 
 with tab_2a:
-    st.markdown("#### CH-2(A) - Jot Chakbandi Akar Patra 2-Ka - 35 Column")
-    st.success(f"SAFE: {len(df_2a)} records")
-    # Public view
+    st.markdown("#### CH-2(A) - 35 Column - LOCKED")
+    if not st.session_state.is_admin:
+        st.error("🔒 Data Locked - Public Can Only View - Admin Login Required For Data Feed")
     st.dataframe(df_2a, use_container_width=True)
-
-    # ADMIN ONLY FEATURE
     if st.session_state.is_admin:
-        st.markdown("---")
-        st.markdown("### 🛠️ Admin - CH-2(A) Data Feed")
+        st.markdown("### 🛠️ Admin Data Feed - CH-2(A) - UNLOCKED")
         with st.form("f2a", clear_on_submit=True):
-            c1,c2,c3 = st.columns(3)
-            with c1:
-                g1 = st.text_input("1. Gata No *")
-                g5 = st.text_input("5. Akar11 Khata No")
-            with c2:
-                g6 = st.text_input("6. Khatedar Naam *")
-                g27 = st.text_input("27. Chak Yogya *")
-            with c3:
-                g28 = st.text_input("28. Vinimay Anupat")
-                g35 = st.text_input("35. Vishesh Vivran")
+            g1 = st.text_input("Gata No *"); g6 = st.text_input("Khatedar Naam *"); g27 = st.text_input("Chak Yogya *")
             if st.form_submit_button("💾 Save CH-2(A)"):
                 if g1 and g6:
-                    row=[""]*35; row[0]=g1; row[4]=g5; row[5]=g6; row[26]=g27; row[27]=g28; row[34]=g35
+                    row=[""]*35; row[0]=g1; row[5]=g6; row[26]=g27
                     df_2a = pd.concat([df_2a, pd.DataFrame([row], columns=COLS_2A)], ignore_index=True)
-                    df_2a.to_csv(F2A, index=False)
-                    st.success("Saved!"); st.balloons()
-
-        # Admin Delete
-        if len(df_2a)>0:
-            del_idx = st.number_input("Delete Row Index CH-2(A)", 0, max(0,len(df_2a)-1), key="del2a")
-            if st.button("🗑️ Delete Row CH-2(A)"):
-                df_2a = df_2a.drop(df_2a.index[del_idx]); df_2a.to_csv(F2A, index=False); st.warning("Deleted"); st.rerun()
-
-        up = st.file_uploader("Bulk Upload CH-2(A)", type=["csv","xlsx"], key="up2a")
-        if up:
-            nd = pd.read_csv(up, dtype=str).fillna("") if up.name.endswith(".csv") else pd.read_excel(up, dtype=str).fillna("")
-            nd.to_csv(F2A, index=False); st.success(f"{len(nd)} Uploaded")
-        st.download_button("📥 Download CH-2(A) Backup", df_2a.to_csv(index=False).encode('utf-8'), "CH-2A_backup.csv")
-    else:
-        st.warning("🔒 Data Feed Ke Liye Admin Login Karo - Sidebar Me")
+                    df_2a.to_csv(F2A, index=False); st.success("Locked Data Saved Safely!"); st.balloons()
+        st.download_button("Download CH-2(A)", df_2a.to_csv(index=False).encode('utf-8'), "CH-2A.csv")
 
 with tab_11:
-    st.markdown("#### CH-11 - 20 Column")
-    st.info(f"SAFE: {len(df_11)} records")
+    st.markdown("#### CH-11 - 20 Column - LOCKED")
+    if not st.session_state.is_admin: st.error("🔒 Data Locked")
     st.dataframe(df_11, use_container_width=True)
     if st.session_state.is_admin:
-        st.markdown("### 🛠️ Admin - CH-11 Data Feed")
         with st.form("f11", clear_on_submit=True):
-            c1,c2 = st.columns(2)
-            with c1:
-                s1 = st.text_input("1. Kram *"); s2 = st.text_input("2. Khatedar Naam *"); s4 = st
+            s1 = st.text_input("Kram *"); s2 = st.text_input("Khatedar Naam *")
+            if st.form_submit_button("💾 Save CH-11"):
+                if s1 and s2:
+                    row=[""]*20; row[0]=s1; row[1]=s2
+                    df_11 = pd.concat([df_11, pd.DataFrame([row], columns=COLS_11)], ignore_index=True)
+                    df_11.to_csv(F11, index=False); st.success("Saved")
+        st.download_button("Download CH-11", df_11.to_csv(index=False).encode('utf-8'), "CH-11.csv")
+
+with tab_23:
+    st.markdown("#### CH-23(1) - 28 Column - LOCKED")
+    if not st.session_state.is_admin: st.error("🔒 Data Locked")
+    st.dataframe(df_23, use_container_width=True)
+    if st.session_state.is_admin:
+        with st.form("f23", clear_on_submit=True):
+            s1 = st.text_input("Kram *"); s2 = st.text_input("Khatedar Naam *"); s5 = st.text_input("Gata Sankhya")
+            if st.form_submit_button("💾 Save CH-23(1)"):
+                if s1 and s2:
+                    row=[""]*28; row[0]=s1; row[1]=s2; row[4]=s5
+                    df_23 = pd.concat([df_23, pd.DataFrame([row], columns=COLS_23)], ignore_index=True)
+                    df_23.to_csv(F23, index=False); st.success("Saved"); st.balloons()
+        st.download_button("Download CH-23(1)", df_23.to_csv(index=False).encode('utf-8'), "CH-23-1.csv")
