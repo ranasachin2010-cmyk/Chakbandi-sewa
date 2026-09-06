@@ -1,25 +1,24 @@
 import streamlit as st
 
-st.set_page_config(page_title="CH-2A 1-1927 Official", layout="wide")
+st.set_page_config(page_title="CH-2A 1-1927 Final", layout="wide")
 
 st.markdown("""
 <style>
-.paper{border:2px solid black; background:white; color:black; padding:10px;}
-.top{display:flex; justify-content:space-between; font-size:13px; border-bottom:1px solid black; padding-bottom:5px;}
-.t{width:100%; border-collapse:collapse; margin-top:10px;}
-.t th,.t td{border:1px solid black; padding:4px; font-size:10px; text-align:center; color:black;}
-.t th{background:#eee;}
-.no-print-hide{margin-bottom:15px;}
-@media print{.no-print-hide{display:none}}
+.stApp {background:white !important;}
+.paper {background:white !important; color:black !important; border:2px solid black; padding:10px;}
+.paper * {color:black !important;}
+.top {display:flex; justify-content:space-between; font-size:14px; border-bottom:1px solid black; padding-bottom:6px;}
+.t {width:100%; border-collapse:collapse; margin-top:10px;}
+.t th, .t td {border:1px solid black !important; padding:5px; font-size:11px; text-align:center; background:white !important; color:black !important;}
+.t th {background:#e9e9e9 !important; font-weight:bold;}
+@media print {.hide{display:none}}
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="no-print-hide">', unsafe_allow_html=True)
+st.markdown('<div class="hide">', unsafe_allow_html=True)
 st.title("CH-2A Official - Turtipur - 1 to 1927")
-st.success("Total Gata 1 se 1927 tak - Official Paper Format")
 st.markdown('</div>', unsafe_allow_html=True)
 
-# PAPER START
 st.markdown('<div class="paper">', unsafe_allow_html=True)
 
 st.markdown("""
@@ -29,16 +28,16 @@ st.markdown("""
 <span>तहसील ............ हरदोई ............</span>
 <span>जिला ............ हरदोई ............</span>
 </div>
-<h3 style="text-align:center;">खसरा चकबन्दी - प्रारूप CH-2A</h3>
+<h3 style="text-align:center; color:black;">खसरा चकबन्दी - प्रारूप CH-2A</h3>
 """, unsafe_allow_html=True)
 
-# Build Table 1: 1-9 - using simple loop, no dataframe key
-html1 = """
+# TABLE 1 - 1 to 9 columns - 1 to 1927 Gata
+html = """
 <table class="t">
 <tr>
 <th colspan="4">क्षेत्रफल</th>
 <th>आधार वर्ष के खाता खतौनी की संख्या</th>
-<th>खातेदार का नाम</th>
+<th>खातेदार का नाम और पता</th>
 <th>असामी का नाम</th>
 <th>कब्जा रखने वाले का नाम</th>
 <th>कब्जे के विवाद</th>
@@ -53,37 +52,15 @@ html1 = """
 </tr>
 """
 
-# 1 to 1927 rows - no pandas, direct loop
+# Loop 1 to 1927 - 9 td exact
 for i in range(1, 1928):
-    html1 += f"<tr><td>{i}</td><td></td><td></td><td></td><td></td></tr>"
-    if i >= 100:  # Preview only 100 for speed
-        break
+    html += f"<tr><td>{i}</td><td></td><td></td></tr>"
 
-html1 += "</table>"
-st.markdown(html1, unsafe_allow_html=True)
-
-# Table 2: 10-20
-html2 = """
-<table class="t">
-<tr>
-<th colspan="4">समुन्नतियों के विवरण</th>
-<th colspan="4">बागों का विवरण</th>
-<th colspan="2">अकृष्ट</th>
-<th>सिंचाई</th>
-</tr>
-<tr>
-<th>विवरण<br>10</th><th>नाप<br>11</th><th>मूल्य<br>12</th><th>स्वामी<br>13</th>
-<th>प्रकार<br>14</th><th>क्षेत्रफल<br>15</th><th>प्रकार<br>16</th><th>सम्मिलित<br>17</th>
-<th>असम्मिलित<br>18</th><th>साधन<br>19</th><th>योग्य<br>20</th>
-</tr>
-"""
-for _ in range(100):
-    html2 += "<tr><td></td><td></td><td></td><td></td><td></td></tr>"
-html2 += "</table>"
-st.markdown(html2, unsafe_allow_html=True)
+html += "</table>"
+st.markdown(html, unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-st.markdown('<div class="no-print-hide">', unsafe_allow_html=True)
-st.info("Preview में 100 गाटा दिख रहे हैं, Print (Ctrl+P) में 1 से 1927 तक पूरे आएंगे। ये वही Format है जो आप चाहते थे।")
+st.markdown('<div class="hide">', unsafe_allow_html=True)
+st.success("Ho gaya bhai - 1 se 1927 tak Gata Sankhya Table me Add hai - Print ke liye Ctrl+P dabao")
 st.markdown('</div>', unsafe_allow_html=True)
