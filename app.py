@@ -62,22 +62,36 @@ with tab3:
         a31=r["c31"]; a32=r["c32"]; a33=r["c33"]; a34=r["c34"]; a35=r["c35"]
 
         h = ""
-        h += "<html><head><style>table{width:100%;border-collapse:collapse}th,td{border:1px solid black;padding:4px;text-align:center;font-size:10px}</style></head><body>"
-        h += "<div style=text-align:center><b>CH-2(क) - Gata "
+        h += "<html><head><style>"
+        h += "body{background:white!important;color:black!important;font-family:Arial;font-size:12px;}"
+        h += "table{width:100%;border-collapse:collapse;background:white;}"
+        h += "th{background:#eeeeee!important;color:black!important;border:1.5px solid black;padding:5px;text-align:center;font-size:11px;}"
+        h += "td{background:white!important;color:black!important;border:1.5px solid black;padding:5px;text-align:center;font-size:11px;}"
+        h += ".head{text-align:center;font-weight:bold;font-size:16px;color:black;background:white;padding:8px;border:2px solid black;margin-bottom:10px;}"
+        h += "</style></head><body>"
+
+        h += "<div class=head>CH-2(क) आकार-पत्र 2-क - जोत चकबन्दी - गाटा "
         h += a1
-        h += "</b></div><br>"
-        h += "<table><tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>"
+        h += " - गाँव तुर्तिपुर</div>"
+
+        h += "<table><tr><th>1 गाटा</th><th>2 आधार</th><th>3 बंदोबस्त</th><th>4 स्थल</th><th>5 खतौनी</th><th>6 खातेदार</th><th>7 असामी</th><th>8 कब्जा</th><th>9 विवाद</th></tr>"
         h += "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(a1,a2,a3,a4,a5,a6,a7,a8,a9)
         h += "</table>"
-        h += "<table><tr><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>"
+
+        h += "<table><tr><th>10 समुन्नति</th><th>11 नाप</th><th>12 मूल्य</th><th>13 स्वामी</th><th>14 बाग4</th><th>15 क्षेत्र</th><th>16 दूसरा</th><th>17 सम्मिलित</th><th>18 असम्मिलित</th><th>19 साधन</th><th>20 योग्य</th></tr>"
         h += "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(a10,a11,a12,a13,a14,a15,a16,a17,a18,a19,a20)
         h += "</table>"
-        h += "<table><tr><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th></tr>"
+
+        h += "<table><tr><th>21 खरीफ</th><th>22 रबी</th><th>23 जायद</th><th>24 प्राकृतिक</th><th>25 वर्ग</th><th>26 अयोग्य</th><th>27 योग्य</th><th>28 अनुपात</th><th>29 मूल्यांकन</th><th>30 वाद</th></tr>"
         h += "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(a21,a22,a23,a24,a25,a26,a27,a28,a29,a30)
         h += "</table>"
-        h += "<table><tr><th>31</th><th>32</th><th>33</th><th>34</th><th>35</th></tr>"
+
+        h += "<table><tr><th>31 मूल्यांकन</th><th>32 संचालक</th><th>33 CO</th><th>34 अपील</th><th>35 विशेष</th></tr>"
         h += "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td></tr>".format(a31,a32,a33,a34,a35)
         h += "</table>"
-        h += "<button onclick=window.print() style=width:100%;padding:12px;background:red;color:white;font-weight:bold>PRINT</button></body></html>"
 
-        components.html(h, height=900, scrolling=True)
+        h += "<button onclick=window.print() style=width:100%;padding:14px;background:#d60000;color:white;font-size:17px;font-weight:bold;border:none;border-radius:8px>PRINT करो - Gata "
+        h += a1
+        h += "</button></body></html>"
+
+        components.html(h, height=1100, scrolling=True)
