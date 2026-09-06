@@ -44,4 +44,4 @@ with t3:
     c2.button("📄 Form 45 - Chakbandi Naksha (PDF)", use_container_width=True)
     st.caption("Note: Ye V1 hai, V2 me isko Bhulekh API se connect kar denge.")
 
-st.caption(f"Made for Ayodhya • {datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%d %b %Y')}")
+st.caption(f"Made for Uttar Pradesh • {datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%d %b %Y')}")
