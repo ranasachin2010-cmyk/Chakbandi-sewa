@@ -1,120 +1,139 @@
 import streamlit as st
 import pandas as pd
 import os
-from datetime import datetime
 
-st.set_page_config(page_title="CH-2K + CH-11 - Final Locked", layout="wide")
-
-MAIN_FOLDER = "Feed_Folder"
-CH2_FOLDER = os.path.join(MAIN_FOLDER, "Survipur_Hardoi")
-CH11_FOLDER = os.path.join(MAIN_FOLDER, "CH-11_Feeding")
-os.makedirs(CH2_FOLDER, exist_ok=True)
-os.makedirs(CH11_FOLDER, exist_ok=True)
+st.set_page_config(page_title="Jot Chakbandi Aakar Patra 2-ka - Exact Format", layout="wide")
 os.makedirs("data", exist_ok=True)
-
-FILE_2K = "data/CH2K_EXACT.csv"
-FILE_11 = os.path.join(CH11_FOLDER, "CH-11_Survipur.csv")
-FOLDER_2K = os.path.join(CH2_FOLDER, "CH-2_K_Feed_Survipur.csv")
+FILE="data/CH2K_EXACT.csv"
 
 COLS = [f"c{i}" for i in range(1,36)]
-HEADS = ["1 - गाटा संख्या","2 - आधार खसरा 2","3 - चालू बन्दोबस्त","4 - स्थल पर","5 - खाता खतौनी संख्या (लाल स्याही)","6 - खातेदार","7 - असामी","8 - कब्जा","9 - विवाद","10 - विवरण","11 - नाप","12 - मूल्य","13 - स्वामी","14 - बाग प्रकार","15 - क्षेत्रफल","16 - अकृष्ट प्रकार","17 - सम्मिलित","18 - असम्मिलित","19 - सिंचाई साधन","20 - योग्य क्षेत्र","21 - खरीफ","22 - रबी","23 - जायद","24 - प्राकृतिक रूप","25 - भूमि वर्ग","26 - अयोग्य","27 - योग्य","28 - विनिमय अनुपात","29 - मूल्यांकन (27-28)","30 - परिष्कृत अनुपात","31 - मूल्यांकन (27-30)","32 - संचालक प्रस्तावित","33 - CO परिष्कृत","34 - अपील परिष्कृत","35 - विशेष"]
+HEADS = [
+"1 - गाटा संख्या",
+"2 - जैसा कि आधार खसरा के स्तम्भ 2 में अभिलिखित है",
+"3 - जैसा कि चालू बन्दोबस्त में अभिलिखित है",
+"4 - जैसा स्थल पर पाया जाय",
+"5 - जोत चकबन्दी आकार पत्र 11 में लाल स्याही से पुनरीक्षित वार्षिक रजिस्टर के खाता खतौनी की संख्या",
+"6 - खातेदार का नाम और पता और भूमिक अधिकार का प्रकार, जो खाते में पहले गाटे के सामने हो",
+"7 - असामी का नाम, यदि कोई हो, और उसका पता (आधार खसरे का स्तम्भ 5)",
+"8 - कब्जा रखने वाले व्यक्ति का नाम, यदि कोई हो, जो आधार खाते के विशेष विवरण के स्तम्भ में दिखाया गया हो",
+"9 - कब्जे के विवादों के विवरण तथा कब्जे की अवधि, जिसका दावा किया जाय और उसका आधार",
+"10 - विवरण (समुन्नतियों का)",
+"11 - नाप और कितना पुराना है",
+"12 - अनुमानित मूल्य",
+"13 - स्वामी का नाम, उसका पता और सम्पत्ति में अंश",
+"14 - प्रकार (बागों का)",
+"15 - क्षेत्रफल",
+"16 - प्रकार (अकृष्ट का)",
+"17 - जोत में सम्मिलित",
+"18 - जोत में असम्मिलित",
+"19 - सिंचाई का साधन और रीति",
+"20 - सिंचाई योग्य क्षेत्रफल",
+"21 - सामान्यतया बोई जाने वाली फसलें खरीफ",
+"22 - रबी",
+"23 - जायद",
+"24 - गाटों की प्राकृतिक रूप-रेखा, विशेष रूप से अकृष्य भाग का क्षेत्रफल...",
+"25 - भूमि का वर्ग जैसा कि चालू बन्दोबस्त में अभिलिखित है",
+"26 - क्षेत्रफल - जोत चकबन्दी योग्य न हो",
+"27 - क्षेत्रफल - चकबन्दी योग्य",
+"28 - संचालक चकबन्दी अधिकारी द्वारा यथा अवधारित गाटे के चकबन्दी योग्य क्षेत्र का आनों में विनिमय अनुपात",
+"29 - गाटे के चकबन्दी योग्य क्षेत्र का मूल्यांकन (स्तम्भ 27-स्तम्भ 28)",
+"30 - वरिष्ठ प्राधिकारियों द्वारा यथा परिष्कृत विनिमय अनुपात और विवरण तथा वाद का विवरण, आज्ञा की संख्या और दिनांक",
+"31 - मूल्यांकन (स्तम्भ 27- स्तम्भ 30)",
+"32 - संचालक, चकबन्दी अधिकारी द्वारा यथा प्रस्तावित",
+"33 - चकबन्दी अधिकारी द्वारा यथापरिष्कृत",
+"34 - अपील और पुनरीक्षण में यथापरिष्कृत",
+"35 - विशेष विवरण"
+]
 
-if os.path.exists(FILE_2K):
-    df2k = pd.read_csv(FILE_2K, dtype=str).fillna("")
+if os.path.exists(FILE):
+    df = pd.read_csv(FILE, dtype=str).fillna("")
 else:
-    df2k = pd.DataFrame(columns=COLS)
+    df = pd.DataFrame(columns=COLS)
 
-if os.path.exists(FILE_11):
-    df11 = pd.read_csv(FILE_11, dtype=str).fillna("")
-else:
-    df11 = pd.DataFrame(columns=["khatauni_no","khatedar_naam","gata_no","rakba","vivran"])
-
+# COLUMN 5 AUR 28 DONO RED - AAPKE GREEN MARK KE HISAB SE
 st.markdown("""
 <style>
-input[aria-label="5 - खाता खतौनी संख्या (लाल स्याही)"],
-input[aria-label="28 - विनिमय अनुपात"] {
-    color: red!important; font-weight: bold!important; border: 2px solid red!important;
+input[aria-label="5 - जोत चकबन्दी आकार पत्र 11 में लाल स्याही से पुनरीक्षित वार्षिक रजिस्टर के खाता खतौनी की संख्या"],
+input[aria-label="28 - संचालक चकबन्दी अधिकारी द्वारा यथा अवधारित गाटे के चकबन्दी योग्य क्षेत्र का आनों में विनिमय अनुपात"] {
+    color: red!important;
+    font-weight: bold!important;
+    border: 2px solid red!important;
 }
 </style>
 """, unsafe_allow_html=True)
 
-tab1, tab2 = st.tabs(["📕 CH-2(क) Folder - LOCKED", "📘 CH-11 Feeding - NEW"])
+st.markdown("<h3 style='text-align:center'>(जोत चकबन्दी आकार-पत्र 2-क)<br>(नियम 21)<br>खसरा चकबन्दी</h3>", unsafe_allow_html=True)
 
-with tab1:
-    st.header("CH-2(क) - आपका LOCKED Format")
-    st.info(f"Folder: {CH2_FOLDER} | Total Gata: {len(df2k)}")
-    with st.form("ch2k"):
-        vals={}
-        cols=st.columns(9)
-        for i in range(9):
-            with cols[i]: vals[COLS[i]] = st.text_input(HEADS[i], key=f"2k{i}")
-        cols=st.columns(11)
-        for i in range(9,20):
-            with cols[i-9]: vals[COLS[i]] = st.text_input(HEADS[i], key=f"2k{i}")
-        cols=st.columns(10)
-        for i in range(20,30):
-            with cols[i-20]: vals[COLS[i]] = st.text_input(HEADS[i], key=f"2k{i}")
-        cols=st.columns(5)
-        for i in range(30,35):
-            with cols[i-30]: vals[COLS[i]] = st.text_input(HEADS[i], key=f"2k{i}")
-        if st.form_submit_button("SAVE to Folder"):
-            if vals["c1"]=="":
-                st.error("Gata No bharo")
-            else:
-                df2k=pd.concat([df2k, pd.DataFrame([vals])], ignore_index=True)
-                df2k.to_csv(FILE_2K, index=False, encoding="utf-8-sig")
-                df2k.to_csv(FOLDER_2K, index=False, encoding="utf-8-sig")
-                st.success(f"Gata {vals['c1']} saved in {CH2_FOLDER}")
-                st.rerun()
-    if len(df2k)>0:
-        del_gata=st.selectbox("Gata Delete", df2k["c1"].unique(), key="del2k")
-        if st.button(f"Delete {del_gata}"):
-            df2k=df2k[df2k["c1"]!=del_gata]
-            df2k.to_csv(FILE_2K, index=False, encoding="utf-8-sig")
-            df2k.to_csv(FOLDER_2K, index=False, encoding="utf-8-sig")
-            st.rerun()
-        st.dataframe(df2k, use_container_width=True)
+c1,c2,c3,c4 = st.columns(4)
+with c1: gaon = st.text_input("गाँव")
+with c2: pargana = st.text_input("परगना")
+with c3: tehsil = st.text_input("तहसील")
+with c4: jila = st.text_input("जिला")
 
-with tab2:
-    st.header("CH-11 Feeding - जोत चकबन्दी आकार पत्र 11")
-    st.info(f"Folder: {CH11_FOLDER} | Khatauni Format jaise sarkari register me hota hai")
+st.divider()
+st.subheader("कागज से देखकर CH-2(क) Feed करो - 1 से 35")
 
-    with st.form("ch11"):
-        c1,c2,c3,c4 = st.columns(4)
-        with c1: kh_no = st.text_input("खाता खतौनी संख्या (लाल स्याही वाली)")
-        with c2: kh_name = st.text_input("खातेदार का नाम + अधिकार प्रकार")
-        with c3: gata_no = st.text_input("गाटा संख्या (CH-2k se link)")
-        with c4: rakba = st.text_input("रकबा / क्षेत्रफल")
-        vivran = st.text_area("विवरण / खसरा से")
-        if st.form_submit_button("CH-11 me SAVE Karo"):
-            if kh_no=="":
-                st.error("खतौनी No to bharo")
-            else:
-                row={"khatauni_no":kh_no, "khatedar_naam":kh_name, "gata_no":gata_no, "rakba":rakba, "vivran":vivran}
-                df11=pd.concat([df11, pd.DataFrame([row])], ignore_index=True) if len(df11)>0 else pd.DataFrame([row])
-                df11.to_csv(FILE_11, index=False, encoding="utf-8-sig")
-                st.success(f"Khatauni {kh_no} saved in {CH11_FOLDER}")
-                st.rerun()
+with st.form("exact_form"):
+    vals={}
+    st.write("**क्षेत्रफल (1-4) + आधार (5-9)**")
+    cols = st.columns(9)
+    for i in range(9):
+        with cols[i]:
+            vals[COLS[i]] = st.text_input(HEADS[i], key=f"in{i}")
 
-    if len(df11)>0:
-        st.subheader(f"CH-11 Feed Data - {len(df11)} entries")
-        # Auto link CH-2k se
-        if len(df2k)>0:
-            st.write("CH-2k se Auto Link (c5 = Khatauni No):")
-            merged = pd.merge(df2k[["c1","c5","c6","c15"]], df11, left_on="c5", right_on="khatauni_no", how="inner")
-            st.dataframe(merged, use_container_width=True)
+    st.write("**समुन्नतियाँ (10-13) + बाग (14-15) + अकृष्ट (16-20)**")
+    cols = st.columns(11)
+    for i in range(9,20):
+        with cols[i-9]:
+            vals[COLS[i]] = st.text_input(HEADS[i], key=f"in{i}")
 
-        st.dataframe(df11, use_container_width=True)
-        del_kh = st.selectbox("CH-11 se Khatauni Delete", df11["khatauni_no"].unique(), key="del11")
-        if st.button(f"CH-11 se {del_kh} Delete karo"):
-            df11=df11[df11["khatauni_no"]!=del_kh]
-            df11.to_csv(FILE_11, index=False, encoding="utf-8-sig")
+    st.write("**फसलें (21-24) + वर्ग (25) + क्षेत्रफल (26-27) + अनुपात/मूल्यांकन (28-30)**")
+    cols = st.columns(10)
+    for i in range(20,30):
+        with cols[i-20]:
+            vals[COLS[i]] = st.text_input(HEADS[i], key=f"in{i}")
+
+    st.write("**मूल्यांकन (31-35)**")
+    cols = st.columns(5)
+    for i in range(30,35):
+        with cols[i-30]:
+            vals[COLS[i]] = st.text_input(HEADS[i], key=f"in{i}")
+
+    if st.form_submit_button("SAVE - कागज वाला गाटा सुरक्षित करो"):
+        if vals["c1"]=="":
+            st.error("स्तम्भ 1 - गाटा संख्या तो भरना ही है")
+        else:
+            df = pd.concat([df, pd.DataFrame([vals])], ignore_index=True)
+            df.to_csv(FILE, index=False, encoding="utf-8-sig")
+            st.success(f"गाटा {vals['c1']} feed ho gaya")
             st.rerun()
 
-with st.sidebar:
-    st.header("📁 Folders")
-    st.write(f"📕 CH-2k: {CH2_FOLDER}")
-    st.write(f"📘 CH-11: {CH11_FOLDER}")
-    if os.path.exists(FILE_11):
-        with open(FILE_11, "rb") as f:
-            st.download_button("CH-11 Download", f, "CH-11.csv")
+if len(df)>0:
+    st.divider()
+    st.subheader(f"Feed hua Data - Total {len(df)} Gata")
+
+    st.write("**गाटा Delete करो**")
+    del_gata = st.selectbox("Delete karne ke liye Gata No chuno (स्तम्भ 1)", df["c1"].unique())
+    if st.button(f"Gata {del_gata} ko DELETE karo"):
+        df = df[df["c1"]!= del_gata]
+        df.to_csv(FILE, index=False, encoding="utf-8-sig")
+        st.success(f"Gata {del_gata} delete ho gaya")
+        st.rerun()
+
+    st.dataframe(df, use_container_width=True)
+
+    html = f"""
+    <html><head><meta charset="utf-8"><style>table,th,td{{border:1px solid black; border-collapse:collapse; font-size:10px;}} th{{background:#eee;}}.red{{color:red; font-weight:bold;}}</style></head>
+    <body>
+    <center><h3>(जोत चकबन्दी आकार-पत्र 2-क) (नियम 21) खसरा चकबन्दी</h3>
+    <p>गाँव {gaon} परगना {pargana} तहसील {tehsil} जिला {jila}</p></center>
+    <table width=100%><tr>
+    {"".join([f"<th>{h}</th>" for h in HEADS])}
+    </tr>
+    {"".join([f"<tr>{''.join([f'<td class={chr(34)}red{chr(34)}>{row[c]}</td>' if c in ['c5','c28'] else f'<td>{row[c]}</td>' for c in COLS])}</tr>" for _,row in df.iterrows()])}
+    </table>
+    <br><button onclick=window.print()>PRINT</button>
+    </body></html>
+    """
+    st.components.v1.html(html, height=800, scrolling=True)
+    st.download_button("CH-2(क) CSV Download", df.to_csv(index=False).encode("utf-8-sig"), "CH-2-KA-EXACT.csv")
