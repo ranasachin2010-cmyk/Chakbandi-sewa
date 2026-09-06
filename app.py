@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime
 import pytz
 
-st.set_page_config(page_title="Ayodhya Chakbandi Seva V1", layout="wide", page_icon="🏞️")
+st.set_page_config(page_title="Chakbandi Seva-UP V1", layout="wide", page_icon="🏞️")
 
 st.markdown("""
 <style>
