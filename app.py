@@ -57,28 +57,25 @@ with tab3:
         sel = st.selectbox('Print ke liye Gata chuno', df['c1'].tolist())
         r = df[df['c1']==sel].iloc[0]
 
-        # FIX: f-string hataya,.format use kiya - isliye aap wala error nahi aayega
-        html_template = """
-        <html><head><meta charset="utf-8"><style>
-        @page {{ size: A4 landscape; margin: 10mm; }}
-        body {{ font-family: Mangal; font-size: 11px; color: black; background: white; }}
-       .head {{ text-align: center; font-weight: bold; font-size: 16px; margin-bottom: 10px; }}
-        table {{ width: 100%; border-collapse: collapse; margin-bottom: 15px; }}
-        th,td {{ border: 1.5px solid black; padding: 4px; text-align: center; font-size: 10px; }}
-        th {{ background: #f2f2f2; }}
-        </style></head><body>
-        <div class="head">(जोत चकबन्दी आकार-पत्र 2-क)<br>(नियम 21)<br>खसरा चकबन्दी<br>गाँव तुर्तिपुर - गाटा {c1}</div>
+        html = ""
+        html += "<html><head><style>"
+        html += "body{font-family:Arial;font-size:11px;background:white;color:black;}"
+        html += "table{width:100%;border-collapse:collapse;margin-bottom:12px;}"
+        html += "th,td{border:1px solid black;padding:4px;text-align:center;font-size:10px;}"
+        html += "th{background:#f2f2f2;}"
+        html += "</style></head><body>"
 
-        <table>
-        <tr><th colspan="4">क्षेत्रफल</th><th>आधार वर्ष</th><th>खातेदार नाम पता</th><th>असामी</th><th>कब्जेदार</th><th>विवाद</th></tr>
-        <tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
-        <tr><td>{c1}</td><td>{c2}</td><td>{c3}</td><td>{c4}</td><td>{c5}</td><td>{c6}</td><td>{c7}</td><td>{c8}</td><td>{c9}</td></tr>
-        </table>
+        html += "<div style=text-align:center><b>(जोत चकबन्दी आकार-पत्र 2-क) (नियम 21) खसरा चकबन्दी - गाटा "
+        html += str(r['c1'])
+        html += "</b></div><br>"
 
-        <table>
-        <tr><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>
-        <tr><td>{c10}</td><td>{c11}</td><td>{c12}</td><td>{c13}</td><td>{c14}</td><td>{c15}</td><td>{c16}</td><td>{c17}</td><td>{c18}</td><td>{c19}</td><td>{c20}</td></tr>
-        </table>
+        html += "<table><tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>"
+        html += "<tr><td>" + str(r['c1']) + "</td><td>" + str(r['c2']) + "</td><td>" + str(r['c3']) + "</td><td>" + str(r['c4']) + "</td><td>" + str(r['c5']) + "</td><td>" + str(r['c6']) + "</td><td>" + str(r['c7']) + "</td><td>" + str(r['c8']) + "</td><td>" + str(r['c9']) + "</td></tr>"
+        html += "</table>"
 
-        <table>
-        <tr><th>21</th><th>22</th><th>23
+        html += "<table><tr><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th><th>16</th><th>17</th><th>18</th><th>19</th><th>20</th></tr>"
+        html += "<tr><td>" + str(r['c10']) + "</td><td>" + str(r['c11']) + "</td><td>" + str(r['c12']) + "</td><td>" + str(r['c13']) + "</td><td>" + str(r['c14']) + "</td><td>" + str(r['c15']) + "</td><td>" + str(r['c16']) + "</td><td>" + str(r['c17']) + "</td><td>" + str(r['c18']) + "</td><td>" + str(r['c19']) + "</td><td>" + str(r['c20']) + "</td></tr>"
+        html += "</table>"
+
+        html += "<table><tr><th>21</th><th>22</th><th>23</th><th>24</th><th>25</th><th>26</th><th>27</th><th>28</th><th>29</th><th>30</th></tr>"
+        html += "<tr><td>" + str(r['c21']) + "</td><td
