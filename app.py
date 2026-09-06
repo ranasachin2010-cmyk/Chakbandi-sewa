@@ -2,96 +2,119 @@ import streamlit as st
 import pandas as pd
 import os
 
-st.set_page_config(page_title="CH-2A 1-1927", layout="wide")
+st.set_page_config(page_title="CH-2A Turtipur 1-1927 Official", layout="wide")
 FILE = "ch_2a_35col.csv"
 
-# Hindi headers - short, one per line - no long HTML
-H = [
-"1 गाटा संख्या",
-"2 आधार खसरा 2 में",
-"3 चालू बन्दोबस्त में",
-"4 स्थल पर पाया जाय",
-"5 खतौनी संख्या CH-11",
-"6 खातेदार का नाम",
-"7 असामी का नाम",
-"8 कब्जा रखने वाले का नाम",
-"9 विवाद विवरण",
-"10 समुन्नति विवरण",
-"11 नाप",
-"12 मूल्य",
-"13 स्वामी नाम अंश",
-"14 बाग प्रकार",
-"15 बाग क्षेत्रफल",
-"16 प्रकार",
-"17 सम्मिलित",
-"18 असम्मिलित",
-"19 सिंचाई साधन",
-"20 सिंचाई योग्य",
-"21 खरीफ",
-"22 रबी",
-"23 जायद",
-"24 प्राकृतिक रूप",
-"25 भूमि वर्ग",
-"26 अयोग्य",
-"27 योग्य",
-"28 विनिमय अनुपात",
-"29 मूल्यांकन",
-"30 परिष्कृत अनुपात",
-"31 मूल्यांकन 31",
-"32 प्रस्तावित",
-"33 परिष्कृत",
-"34 अपील में परिष्कृत",
-"35 विशेष"
+# 35 Hindi Headers - Official as per your photo
+HEADERS = [
+"गाटा संख्या 1",
+"जैसा कि आधार खसरा के स्तम्भ 2 में अभिलिखित है 2",
+"जैसा कि चालू बन्दोबस्त में अभिलिखित है 3",
+"जैसा स्थल पर पाया जाय 4",
+"जोत चकबन्दी आकार पत्र 11 में लाल स्याही से पुनरीक्षित वार्षिक रजिस्टर के खाता खतौनी की संख्या 5",
+"खातेदार का नाम और पता और भौमिक अधिकार का प्रकार 6",
+"असामी का नाम यदि कोई हो और उसका पता 7",
+"कब्जा रखने वाले व्यक्ति का नाम 8",
+"कब्जे के विवादों के विवरण 9",
+"विवरण 10",
+"नाप और कितना पुराना है 11",
+"अनुमानित मूल्य 12",
+"स्वामी का नाम उसका पता और सम्पत्ति में अंश 13",
+"प्रकार 14",
+"क्षेत्रफल 15",
+"प्रकार 16",
+"जोत में सम्मिलित 17",
+"जोत में असम्मिलित 18",
+"सिंचाई का साधन और रीति 19",
+"सिंचाई योग्य क्षेत्रफल 20",
+"सामान्यतया बोई जाने वाली फसलें खरीफ 21",
+"रबी 22",
+"जायद 23",
+"गाटों की प्राकृतिक रूप-रेखा 24",
+"भूमि का वर्ग जैसा कि चालू बन्दोबस्त में अभिलिखित है 25",
+"क्षेत्रफल अयोग्य 26",
+"क्षेत्रफल योग्य 27",
+"संचालक चकबन्दी अधिकारी द्वारा यथा अवधारित विनिमय अनुपात 28",
+"गाटे के चकबन्दी योग्य क्षेत्र का मूल्यांकन 29",
+"वरिष्ठ प्राधिकारियों द्वारा परिष्कृत विनिमय अनुपात 30",
+"मूल्यांकन 31",
+"संचालक द्वारा प्रस्तावित 32",
+"चकबन्दी अधिकारी द्वारा परिष्कृत 33",
+"अपील पुनरीक्षण में परिष्कृत 34",
+"विशेष विवरण 35"
 ]
 
-def make():
-    data = []
+def make_file():
+    rows = []
     for i in range(1, 1928):
-        row = [""]*35
-        row[0] = str(i)
-        data.append(row)
-    df = pd.DataFrame(data, columns=H)
+        r = [""]*35
+        r[0] = str(i)
+        rows.append(r)
+    df = pd.DataFrame(rows, columns=HEADERS)
     df.to_csv(FILE, index=False, encoding="utf-8-sig")
     return df
 
-def load():
+def load_file():
     if not os.path.exists(FILE):
-        return make()
+        return make_file()
     try:
         df = pd.read_csv(FILE, dtype=str).fillna("")
-        # fix header if old file had C2 C3
-        if "Gata_Sankhya" in df.columns or "C1" in df.columns or "C2" in df.columns:
-            # old file - recreate with Hindi
-            return make()
+        # if old file had C2 C3 etc, recreate
+        if "C2" in df.columns or "Gata_Sankhya" in df.columns or len(df.columns)!=35:
+            return make_file()
         if len(df) < 1927:
-            return make()
+            return make_file()
         return df
     except:
-        return make()
+        return make_file()
 
-df = load()
+df = load_file()
 
-st.title("CH-2A Turtipur - 1 to 1927 Gata - Final")
-st.success(f"Total Gata: {len(df)} - Gata 1 se 1927 tak Added Hai")
+# --- NO PRINT ---
+st.markdown('<div class="no-print">', unsafe_allow_html=True)
+st.title("CH-2A Official - Turtipur - 1 to 1927")
+st.success(f"Total Gata: {len(df)} - 1 se 1927 tak")
 
-if st.button("Reset 1-1927"):
+if st.button("Reset 1-1927 File"):
     if os.path.exists(FILE):
         os.remove(FILE)
     st.rerun()
 
-uploaded = st.file_uploader("CSV Upload (35 col)", type=["csv"])
-if uploaded:
-    df_up = pd.read_csv(uploaded, dtype=str).fillna("")
+up = st.file_uploader("Upload CSV 35 columns", type=["csv"])
+if up:
+    df_up = pd.read_csv(up, dtype=str).fillna("")
     df_up.to_csv(FILE, index=False, encoding="utf-8-sig")
     st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown("### Preview First 100 Gata - Same Format Me")
-st.dataframe(df.head(100), use_container_width=True)
+# --- PRINT OFFICIAL FORMAT - Triple quotes to avoid error ---
+html_top = """
+<div style="border:2px solid black; padding:10px; background:white; color:black; font-family:Mangal;">
+<div style="display:flex; justify-content:space-between; font-size:14px;">
+<span>गाँव............तुर्तिपुर............</span>
+<span>परगना............हरदोई............</span>
+<span>तहसील............हरदोई............</span>
+<span>जिला............हरदोई............</span>
+</div>
+<h3 style="text-align:center; margin:10px 0;">खसरा चकबन्दी - प्रारूप CH-2A - 35 कॉलम</h3>
+"""
 
-st.markdown("### Full 1927 Table")
-st.dataframe(df, use_container_width=True, height=600)
+st.markdown(html_top, unsafe_allow_html=True)
 
+# Table 1 : 1-9
+st.markdown("#### खसरा चकबन्दी - भाग 1 (कॉलम 1-9)")
+st.dataframe(df.iloc[:, 0:9].head(100), use_container_width=True)
+
+st.markdown("#### भाग 2 (कॉलम 10-20) - समुन्नतियों का विवरण, बाग, अकृष्ट, सिंचाई")
+st.dataframe(df.iloc[:, 9:20].head(100), use_container_width=True)
+
+st.markdown("#### भाग 3 (कॉलम 21-35) - फसलें, प्राकृतिक रूप, विनिमय अनुपात, मूल्यांकन")
+st.dataframe(df.iloc[:, 20:35].head(100), use_container_width=True)
+
+st.markdown("</div>", unsafe_allow_html=True)
+
+st.markdown('<div class="no-print">', unsafe_allow_html=True)
+st.info("Print के लिए Ctrl+P दबाओ - यही Format आपके Photo जैसा 3 Table में आएगा। 1 से 1927 तक सभी गाटे CSV में हैं।")
 with open(FILE, "rb") as f:
-    st.download_button("Download 1927 Gata CSV - Hindi Header", f, file_name="CH2A_1_to_1927_Turtipur.csv", mime="text/csv")
-
-st.info("CH-2A 35 Column - Jot Chakbandi Akar-Patra 2-Ka - Niyam 21 - Village Turtipur - 1 to 1927")
+    st.download_button("Download Full 1927 CSV - Official Format", f, file_name="CH2A_Turtipur_1_to_1927_Official.csv", mime="text/csv")
+st.markdown('</div>', unsafe_allow_html=True)
